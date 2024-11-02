@@ -7,6 +7,8 @@ import QnAPage from './QnAPage';
 import MusicPlayer from './MusicPlayer';
 import WebcamPage from './WebcamPage';
 import DietPlan from './DietPlan';
+import Dashboard from './Dashboard';
+import MeditationPage from './MeditationPage';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -113,8 +115,8 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="MentalHealthQnA" component={QnAPage} options={{ title: 'Mental Health QnA' }} />
       <Drawer.Screen name="MentalHealthAI" component={WebcamPage} options={{ title: 'Mental Health AI Analysis' }} />
       <Drawer.Screen name="MusicRelax" component={MusicPlayer} options={{ title: 'Relax with Music' }} />
-      <Drawer.Screen name="BurnoutDashboard" component={PlaceholderScreen} options={{ title: 'Burnout Dashboard' }} />
-      <Drawer.Screen name="Meditation" component={PlaceholderScreen} options={{ title: 'Meditation' }} />
+      <Drawer.Screen name="BurnoutDashboard" component={Dashboard} options={{ title: 'Burnout Dashboard' }} />
+      <Drawer.Screen name="Meditation" component={MeditationPage} options={{ title: 'Meditation' }} />
       <Drawer.Screen name="DietPlan" component={DietPlan} options={{ title: 'Diet Plan' }} />
     </Drawer.Navigator>
   );
@@ -140,6 +142,8 @@ const App = () => {
         <Stack.Screen name="MentalHealthQnA" component={QnAPage} />
         <Stack.Screen name="MentalHealthAI" component={WebcamPage} />
         <Stack.Screen name="DietPlan" component={DietPlan} />
+        <Stack.Screen name="BurnoutDashboard" component={Dashboard} />
+        <Stack.Screen name="Meditation" component={MeditationPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
