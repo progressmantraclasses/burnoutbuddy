@@ -9,6 +9,7 @@ import WebcamPage from './WebcamPage';
 import DietPlan from './DietPlan';
 import Dashboard from './Dashboard';
 import MeditationPage from './MeditationPage';
+import Stepcounter from './Stepcounter';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -144,6 +145,7 @@ const App = () => {
         <Stack.Screen name="DietPlan" component={DietPlan} />
         <Stack.Screen name="BurnoutDashboard" component={Dashboard} />
         <Stack.Screen name="Meditation" component={MeditationPage} />
+         <Stack.Screen name="Stepcounter" component={Stepcounter} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,13 +1,17 @@
 // src/MeditationPage.js
 
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ProgressBarAndroid } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ProgressBarAndroid, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const MeditationPage = () => {
+const { width, height } = Dimensions.get('window');
+
+const MeditationPage = ({ navigation }) => {
   const [selectedMeditation, setSelectedMeditation] = useState(null);
   const [isMeditationStarted, setIsMeditationStarted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
+  const [currentStep, setCurrentStep] = useState(0);
+  const scrollViewRef = useRef();
 
   const meditations = [
     { id: 1, title: 'Morning Meditation', duration: 10, steps: ['Sit comfortably', 'Close your eyes', 'Take deep breaths'] },
@@ -34,6 +38,15 @@ const MeditationPage = () => {
   const startMeditation = () => {
     setTimeLeft(selectedMeditation.duration * 60);
     setIsMeditationStarted(true);
+    setCurrentStep(0);
+  };
+
+  const nextStep = () => {
+    if (currentStep < selectedMeditation.steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      alert("You have completed all the steps!");
+    }
   };
 
   const formatTime = () => {
@@ -42,12 +55,25 @@ const MeditationPage = () => {
     return `${minutes}:${String(seconds).padStart(2, '0')}`;
   };
 
+  const scrollToExerciseDetails = () => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ y: height / 3, animated: true });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>🧘 Meditation for Mental Health 🧘</Text>
       <Text style={styles.subHeader}>Select a Session:</Text>
 
-      <ScrollView style={styles.meditationList}>
+      <ScrollView style={styles.meditationList} ref={scrollViewRef}>
+        <TouchableOpacity
+          style={styles.nextStepButton}
+          onPress={() => navigation.navigate('Stepcounter')}
+        >
+          <Text style={styles.nextStepButtonText}>Go to Step Tracker</Text>
+        </TouchableOpacity>
+        
         {meditations.map((meditation) => (
           <TouchableOpacity
             key={meditation.id}
@@ -55,6 +81,7 @@ const MeditationPage = () => {
             onPress={() => {
               setSelectedMeditation(meditation);
               setIsMeditationStarted(false);
+              scrollToExerciseDetails();
             }}
           >
             <Icon name="self-improvement" size={24} color="#2e6da4" style={styles.icon} />
@@ -71,9 +98,11 @@ const MeditationPage = () => {
             <Text style={styles.exerciseDuration}>Duration: {selectedMeditation.duration} mins</Text>
 
             <ScrollView style={styles.stepsContainer}>
-              {selectedMeditation.steps.map((step, index) => (
+              {selectedMeditation.steps.slice(0, currentStep + 1).map((step, index) => (
                 <View key={index} style={styles.stepCard}>
-                  <Text style={styles.stepText}>{index + 1}. {step}</Text>
+                  <Text style={styles.stepText}>
+                    {index + 1}. {step}
+                  </Text>
                 </View>
               ))}
             </ScrollView>
@@ -81,11 +110,22 @@ const MeditationPage = () => {
             {isMeditationStarted ? (
               <View style={styles.timerContainer}>
                 <Text style={styles.timerText}>Time Left: {formatTime()}</Text>
-                <ProgressBarAndroid styleAttr="Horizontal" indeterminate={false} progress={(selectedMeditation.duration * 60 - timeLeft) / (selectedMeditation.duration * 60)} color="#2e6da4" />
+                <ProgressBarAndroid
+                  styleAttr="Horizontal"
+                  indeterminate={false}
+                  progress={(selectedMeditation.duration * 60 - timeLeft) / (selectedMeditation.duration * 60)}
+                  color="#2e6da4"
+                />
               </View>
             ) : (
               <TouchableOpacity style={styles.startButton} onPress={startMeditation}>
                 <Text style={styles.startButtonText}>Start Meditation</Text>
+              </TouchableOpacity>
+            )}
+
+            {isMeditationStarted && currentStep < selectedMeditation.steps.length && (
+              <TouchableOpacity style={styles.nextStepButton} onPress={nextStep}>
+                <Text style={styles.nextStepButtonText}>Next Step</Text>
               </TouchableOpacity>
             )}
 
@@ -103,66 +143,64 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f8fc',
-    padding: 20,
+    paddingHorizontal: width * 0.05,
+    paddingVertical: height * 0.02,
   },
   header: {
-    fontSize: 28,
+    fontSize: width < 350 ? 24 : 28,
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#2e6da4',
     marginVertical: 10,
   },
   subHeader: {
-    fontSize: 18,
+    fontSize: width < 350 ? 16 : 18,
     textAlign: 'center',
     color: '#555',
-    marginBottom: 20,
+    marginBottom: 15,
   },
   meditationList: {
-    flexGrow: 1,
+    marginBottom: 20,
   },
   meditationCard: {
     flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 10,
+    marginVertical: 5,
+    elevation: 1,
     alignItems: 'center',
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 15,
-    marginVertical: 8,
-    elevation: 2,
   },
   icon: {
     marginRight: 10,
   },
   meditationTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#333',
+    fontSize: width < 350 ? 16 : 18,
+    fontWeight: 'bold',
+    color: '#2e6da4',
   },
   meditationDuration: {
-    fontSize: 16,
-    color: '#777',
+    fontSize: width < 350 ? 12 : 14,
+    color: '#555',
   },
   exerciseContainer: {
-    backgroundColor: '#eaf3fb',
-    borderRadius: 12,
-    padding: 20,
     marginTop: 20,
   },
   exerciseHeader: {
-    fontSize: 24,
+    fontSize: width < 350 ? 20 : 24,
     fontWeight: 'bold',
-    color: '#2e6da4',
     textAlign: 'center',
-    marginBottom: 8,
+    color: '#2e6da4',
+    marginBottom: 10,
   },
   exerciseDuration: {
-    fontSize: 16,
-    color: '#555',
+    fontSize: 18,
     textAlign: 'center',
-    marginBottom: 15,
+    color: '#555',
+    marginBottom: 10,
   },
   stepsContainer: {
-    maxHeight: 180,
+    maxHeight: height * 0.3,
   },
   stepCard: {
     backgroundColor: '#fff',
@@ -175,36 +213,47 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#333',
   },
-  timerContainer: {
-    alignItems: 'center',
-    marginVertical: 15,
-  },
-  timerText: {
-    fontSize: 22,
-    fontWeight: '600',
-    color: '#2e6da4',
-  },
   startButton: {
     backgroundColor: '#2e6da4',
-    borderRadius: 30,
-    paddingVertical: 15,
+    paddingVertical: 12,
+    paddingHorizontal: width * 0.2,
+    borderRadius: 25,
     alignItems: 'center',
-    marginTop: 15,
+    marginTop: 20,
   },
   startButtonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
-  closeButton: {
-    backgroundColor: '#ccc',
-    borderRadius: 20,
+  nextStepButton: {
+    backgroundColor: '#2e6da4',
     paddingVertical: 10,
+    borderRadius: 25,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  nextStepButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  timerContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  timerText: {
+    fontSize: 18,
+    color: '#333',
+  },
+  closeButton: {
+    backgroundColor: '#aaa',
+    paddingVertical: 10,
+    borderRadius: 25,
     alignItems: 'center',
     marginTop: 10,
   },
   closeButtonText: {
-    color: '#333',
+    color: '#fff',
     fontSize: 16,
   },
 });

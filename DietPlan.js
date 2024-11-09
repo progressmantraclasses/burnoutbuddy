@@ -118,7 +118,8 @@ const DietPlan = () => {
           <View style={styles.allFoodItem}>
             <Text style={styles.foodName}>{item.name}</Text>
             <Text style={styles.foodInfo}>
-              {item.calories} kcal - ₹{item.cost}
+            {item.calories} kcal - {item.benefit} - ₹{item.cost}
+
             </Text>
           </View>
         )}
