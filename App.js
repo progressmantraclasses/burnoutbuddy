@@ -10,6 +10,7 @@ import DietPlan from './DietPlan';
 import Dashboard from './Dashboard';
 import MeditationPage from './MeditationPage';
 import Stepcounter from './Stepcounter';
+import Pomodoro from './Pomodoro';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -84,6 +85,12 @@ const HomeScreen = ({ navigation }) => {
         onPress={() => navigation.navigate('DietPlan')}
         backgroundColor="#dcedc8"
       />
+       <OptionCard
+        title="Pomodoro technique for Mental Health"
+        imageUri="https://cdn.pixabay.com/photo/2013/07/13/01/22/vegetables-155616_1280.png"
+        onPress={() => navigation.navigate('Pomodoro')}
+        backgroundColor="#dcedc8"
+      />
     </ScrollView>
   );
 };
@@ -98,17 +105,17 @@ const DrawerNavigator = () => {
         headerTitleStyle: styles.burnoutBuddyTitle,
       }}
     >
-      <Drawer.Screen
-        name="Burnout Buddy"
-        component={HomeScreen}
-        options={{
-          title: 'Burnout Buddy',
-          headerRight: () => (
-            <TouchableOpacity onPress={() => {/* Navigate to Profile page here */}}>
-              <Image
-                source={require('./assets/2ment.jpg')}
-                style={styles.profileImage}
-              />
+   <Drawer.Screen
+      name="Burnout Buddy"
+      component={HomeScreen}
+      options={{
+        title: 'Burnout Buddy',
+        headerRight: () => (
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <Image
+              source={require('./assets/2ment.jpg')}
+              style={styles.profileImage}
+            />
             </TouchableOpacity>
           ),
         }}
@@ -119,6 +126,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="BurnoutDashboard" component={Dashboard} options={{ title: 'Burnout Dashboard' }} />
       <Drawer.Screen name="Meditation" component={MeditationPage} options={{ title: 'Meditation' }} />
       <Drawer.Screen name="DietPlan" component={DietPlan} options={{ title: 'Diet Plan' }} />
+      <Drawer.Screen name="Pomodoro" component={Pomodoro} options={{ title: 'Pomodoro Timer' }} />
     </Drawer.Navigator>
   );
 };
@@ -143,6 +151,7 @@ const App = () => {
         <Stack.Screen name="MentalHealthQnA" component={QnAPage} />
         <Stack.Screen name="MentalHealthAI" component={WebcamPage} />
         <Stack.Screen name="DietPlan" component={DietPlan} />
+        <Stack.Screen name="Pomodoro" component={Pomodoro} />
         <Stack.Screen name="BurnoutDashboard" component={Dashboard} />
         <Stack.Screen name="Meditation" component={MeditationPage} />
          <Stack.Screen name="Stepcounter" component={Stepcounter} />

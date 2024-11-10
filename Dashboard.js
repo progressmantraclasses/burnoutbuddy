@@ -1,108 +1,111 @@
-// Dashboard.js
-
-import React, { useState } from 'react';
-import { View, Text, Button, ScrollView, StyleSheet } from 'react-native';
+// screens/Dashboard.js
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, Button, Alert } from 'react-native';
+import { LineChart, PieChart } from 'react-native-chart-kit';
+import moment from 'moment';
 
 const Dashboard = () => {
-  // Mood Tracker State
-  const [mood, setMood] = useState('Neutral');
-  const moods = ['Happy', 'Sad', 'Anxious', 'Excited', 'Calm'];
+  const [screenTimeData, setScreenTimeData] = useState([]);
+  const [unlockCount, setUnlockCount] = useState(0);
+  const [goal, setGoal] = useState(5); // Default daily goal in hours
 
-  // Daily Tasks
-  const tasks = [
-    'Practice mindfulness meditation for 10 minutes',
-    'Go for a 20-minute walk',
-    'Write down three things you are grateful for',
-  ];
+  useEffect(() => {
+    // Simulate fetching data
+    fetchScreenTimeData();
+  }, []);
 
-  // Relaxation Resources
-  const resources = [
-    'Guided Meditation App: Calm',
-    'Breathing Exercises: Headspace',
-    'Yoga Videos: YouTube',
-  ];
+  const fetchScreenTimeData = () => {
+    setScreenTimeData([2, 4, 3, 6, 7, 5, 4]);
+    setUnlockCount(50);
+  };
+
+  const checkGoal = () => {
+    const totalScreenTime = screenTimeData.reduce((a, b) => a + b, 0) / 7; // average daily time
+    if (totalScreenTime > goal) {
+      Alert.alert("Goal Alert", "You've exceeded your daily screen time goal!");
+    }
+  };
+
+  const renderHealthTips = () => {
+    return (
+      <View style={styles.tipsContainer}>
+        <Text style={styles.tipTitle}>Health Tips</Text>
+        <Text style={styles.tipText}>• Avoid using your phone an hour before bed.</Text>
+        <Text style={styles.tipText}>• Take regular breaks to prevent eye strain.</Text>
+        <Text style={styles.tipText}>• Practice deep breathing for a mental refresh.</Text>
+      </View>
+    );
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Mental Health Dashboard</Text>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Mood Tracker */}
-        <View style={styles.card}>
-          <Text style={styles.title}>Mood Tracker</Text>
-          <Text style={styles.moodText}>Current Mood: {mood}</Text>
-          {moods.map((item) => (
-            <Button key={item} title={item} onPress={() => setMood(item)} />
-          ))}
-        </View>
+    <ScrollView style={styles.container}>
+      {/* Summary Section */}
+      <Text style={styles.title}>Summary & Quick Stats</Text>
+      <Text style={styles.stat}>Daily Screen Time Goal: {goal} hours</Text>
+      <Text style={styles.stat}>Weekly Unlock Count: {unlockCount}</Text>
 
-        {/* Daily Tasks */}
-        <View style={styles.card}>
-          <Text style={styles.title}>Daily Tasks</Text>
-          {tasks.map((task, index) => (
-            <Text key={index} style={styles.taskText}>
-              - {task}
-            </Text>
-          ))}
-        </View>
+      {/* Line Chart for Weekly Screen Time */}
+      <Text style={styles.title}>Weekly Screen Time</Text>
+      <LineChart
+        data={{
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{ data: screenTimeData }],
+        }}
+        width={340}
+        height={220}
+        yAxisLabel="Hrs"
+        chartConfig={{
+          backgroundColor: '#e26a00',
+          backgroundGradientFrom: '#fb8c00',
+          backgroundGradientTo: '#ffa726',
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+        }}
+        style={styles.chart}
+      />
 
-        {/* Relaxation Resources */}
-        <View style={styles.card}>
-          <Text style={styles.title}>Relaxation Resources</Text>
-          {resources.map((resource, index) => (
-            <Text key={index} style={styles.resourceText}>
-              - {resource}
-            </Text>
-          ))}
-        </View>
-      </ScrollView>
-    </View>
+      {/* Pie Chart for App Usage Breakdown */}
+      <Text style={styles.title}>App Usage Breakdown</Text>
+      <PieChart
+        data={[
+          { name: 'Social', usage: 4, color: 'tomato', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+          { name: 'Work', usage: 6, color: 'blue', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+          { name: 'Entertainment', usage: 3, color: 'green', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+          { name: 'Others', usage: 2, color: 'gold', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+        ]}
+        width={340}
+        height={220}
+        chartConfig={{
+          backgroundColor: '#1cc910',
+          backgroundGradientFrom: '#eff3ff',
+          backgroundGradientTo: '#efefef',
+          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+        }}
+        accessor="usage"
+        backgroundColor="transparent"
+        paddingLeft="15"
+      />
+
+      {/* Goal and Reminder Section */}
+      <Text style={styles.title}>Set Daily Screen Time Goal</Text>
+      <View style={styles.goalContainer}>
+        <Button title="Check Goal Status" onPress={checkGoal} />
+      </View>
+
+      {/* Health Tips Section */}
+      {renderHealthTips()}
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f0f8ff',
-    padding: 20,
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-    color: '#333',
-  },
-  scrollContainer: {
-    paddingBottom: 20,
-  },
-  card: {
-    marginBottom: 20,
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  moodText: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  taskText: {
-    fontSize: 16,
-  },
-  resourceText: {
-    fontSize: 16,
-  },
+  container: { flex: 1, padding: 20, backgroundColor: '#fff' },
+  title: { fontSize: 20, fontWeight: 'bold', marginBottom: 10 },
+  stat: { fontSize: 16, color: '#333', marginBottom: 5 },
+  chart: { marginVertical: 20 },
+  goalContainer: { marginBottom: 20 },
+  tipsContainer: { padding: 10, marginTop: 20, backgroundColor: '#f0f4f7', borderRadius: 10 },
+  tipTitle: { fontSize: 18, fontWeight: 'bold', color: '#333', marginBottom: 8 },
+  tipText: { fontSize: 14, color: '#555' },
 });
 
 export default Dashboard;
