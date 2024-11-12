@@ -24,6 +24,20 @@
 
 🍏 **Diet & Fitness Tips**: Wellness suggestions that align with mental health goals.
 
+## 💻 Tech Stack
+### Frontend
+**React Native**: For building a cross-platform mobile application with a responsive and interactive UI.\
+**JavaScript**: Core language for writing and structuring app logic in React Native.
+### Backend
+**Python**: Powers server-side processing and machine learning workflows.\
+**Flask**: A lightweight Python framework for creating RESTful APIs and managing backend routes.
+### Machine Learning
+**Machine Learning Model**: Trained models for tasks like speech emotion recognition and user behavior analysis. Deployed in the backend to deliver personalized insights.
+### Dev Tools
+**GitHub**: Version control and collaboration platform for managing code and tracking changes.\
+**Postman**: For API testing and debugging, ensuring smooth communication between frontend and backend.\
+**VS Code**: Primary development environment for coding and testing.
+
 
 ## 🚀 Setup and Installation
 To set up Burnout Buddy on your local machine, follow these steps:
