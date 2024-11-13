@@ -81,13 +81,13 @@ const HomeScreen = ({ navigation }) => {
       />
       <OptionCard
         title="Diet Plan for Mental Health"
-        imageUri="https://cdn.pixabay.com/photo/2013/07/13/01/22/vegetables-155616_1280.png"
+        imageUri="https://cdn.pixabay.com/photo/2021/07/05/01/04/tomato-6387879_1280.png"
         onPress={() => navigation.navigate('DietPlan')}
         backgroundColor="#dcedc8"
       />
        <OptionCard
-        title="Pomodoro technique for Mental Health"
-        imageUri="https://cdn.pixabay.com/photo/2013/07/13/01/22/vegetables-155616_1280.png"
+        title="Pomodoro technique"
+        imageUri="https://cdn.pixabay.com/photo/2013/07/13/13/17/chronograph-160753_1280.png"
         onPress={() => navigation.navigate('Pomodoro')}
         backgroundColor="#dcedc8"
       />
