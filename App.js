@@ -11,6 +11,7 @@ import Dashboard from './Dashboard';
 import MeditationPage from './MeditationPage';
 import Stepcounter from './Stepcounter';
 import Pomodoro from './Pomodoro';
+import { useNavigation } from '@react-navigation/native'; // Import the useNavigation hook
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -35,7 +36,9 @@ const OptionCard = ({ title, imageUri, onPress, backgroundColor }) => {
 };
 
 // Main Home Screen Component
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
+  const navigation = useNavigation(); // Access the navigation prop using the hook
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.welcome}>Welcome back, Shivam!</Text>
@@ -85,11 +88,11 @@ const HomeScreen = ({ navigation }) => {
         onPress={() => navigation.navigate('DietPlan')}
         backgroundColor="#dcedc8"
       />
-       <OptionCard
+      <OptionCard
         title="Pomodoro technique for Mental Health"
-        imageUri="https://cdn.pixabay.com/photo/2013/07/13/01/22/vegetables-155616_1280.png"
+        imageUri="https://cdn.pixabay.com/photo/2014/06/28/10/06/hour-s-378829_1280.jpg"
         onPress={() => navigation.navigate('Pomodoro')}
-        backgroundColor="#dcedc8"
+        backgroundColor="#c5cae9"
       />
     </ScrollView>
   );
@@ -97,6 +100,8 @@ const HomeScreen = ({ navigation }) => {
 
 // Drawer Navigation
 const DrawerNavigator = () => {
+  const navigation = useNavigation(); // Use the navigation hook here as well
+
   return (
     <Drawer.Navigator
       initialRouteName="Home"
@@ -105,17 +110,17 @@ const DrawerNavigator = () => {
         headerTitleStyle: styles.burnoutBuddyTitle,
       }}
     >
-   <Drawer.Screen
-      name="Burnout Buddy"
-      component={HomeScreen}
-      options={{
-        title: 'Burnout Buddy',
-        headerRight: () => (
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            <Image
-              source={require('./assets/2ment.jpg')}
-              style={styles.profileImage}
-            />
+      <Drawer.Screen
+        name="Burnout Buddy"
+        component={HomeScreen}
+        options={{
+          title: 'Burnout Buddy',
+          headerRight: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('BurnoutDashboard')}>
+              <Image
+                source={require('./assets/profile2.png')}
+                style={styles.profileImage}
+              />
             </TouchableOpacity>
           ),
         }}
@@ -123,7 +128,15 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="MentalHealthQnA" component={QnAPage} options={{ title: 'Mental Health QnA' }} />
       <Drawer.Screen name="MentalHealthAI" component={WebcamPage} options={{ title: 'Mental Health AI Analysis' }} />
       <Drawer.Screen name="MusicRelax" component={MusicPlayer} options={{ title: 'Relax with Music' }} />
-      <Drawer.Screen name="BurnoutDashboard" component={Dashboard} options={{ title: 'Burnout Dashboard' }} />
+      <Drawer.Screen name="BurnoutDashboard" component={Dashboard} options={{ title: 'Burnout Dashboard',
+          headerRight: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('BurnoutDashboard')}>
+              <Image
+                source={require('./assets/profile2.png')}
+                style={styles.profileImage}
+              />
+            </TouchableOpacity>
+          ), }} />
       <Drawer.Screen name="Meditation" component={MeditationPage} options={{ title: 'Meditation' }} />
       <Drawer.Screen name="DietPlan" component={DietPlan} options={{ title: 'Diet Plan' }} />
       <Drawer.Screen name="Pomodoro" component={Pomodoro} options={{ title: 'Pomodoro Timer' }} />
@@ -154,7 +167,7 @@ const App = () => {
         <Stack.Screen name="Pomodoro" component={Pomodoro} />
         <Stack.Screen name="BurnoutDashboard" component={Dashboard} />
         <Stack.Screen name="Meditation" component={MeditationPage} />
-         <Stack.Screen name="Stepcounter" component={Stepcounter} />
+        <Stack.Screen name="Stepcounter" component={Stepcounter} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -168,7 +181,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
   },
   burnoutBuddyTitle: {
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: 'bold',
     fontFamily: 'serif',
     color: '#333',
@@ -178,7 +191,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginRight: 10,
+    marginRight: 20,
   },
   welcome: {
     fontSize: 22,
@@ -245,3 +258,4 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+

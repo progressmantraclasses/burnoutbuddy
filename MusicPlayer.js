@@ -9,19 +9,25 @@ const audioTracks = [
       title: 'Chill Vibes',
       artist: 'Relaxing Tunes',
       source: require('./assets/sukoon.mp3'),
-      albumCover: require('./assets/sukoon.png'),
+      albumCover: require('./assets/sukoon.jpg'),
+    },
+    {
+      title: 'party',
+      artist: 'Relaxing Tunes',
+      source: require('./assets/sukoon.mp3'),
+      albumCover: require('./assets/sukoon.jpg'),
     },
     {
       title: 'Sunset Beats',
       artist: 'Sunshine Music',
       source: require('./assets/tadapna.mp3'),
-      albumCover: require('./assets/sukoon.png'),
+      albumCover: require('./assets/sukoon.jpg'),
     },
     {
       title: 'Ocean Waves',
       artist: 'Nature Sounds',
       source: require('./assets/sukoon.mp3'),
-      albumCover: require('./assets/sukoon.png'),
+      albumCover: require('./assets/sukoon.jpg'),
     },
   ];
 
@@ -127,9 +133,7 @@ const MusicPlayer = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Relax with Music</Text>
-      </View>
+      
       <Image
         source={audioTracks[currentTrackIndex].albumCover}
         style={styles.albumCover}

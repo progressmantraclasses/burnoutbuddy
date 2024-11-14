@@ -4,7 +4,7 @@ import { Audio } from 'expo-av';
 
 const Pomodoro = () => {
   // Timer states
-  const [timeLeft, setTimeLeft] = useState(.5 * 60); // 25 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes in seconds
   const [isRunning, setIsRunning] = useState(false);
 
   // Mood Tracker states

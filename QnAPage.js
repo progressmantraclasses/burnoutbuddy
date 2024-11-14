@@ -75,7 +75,7 @@ const QnAPage = () => {
       ) : (
         <View style={styles.resultContainer}>
           <Text style={styles.resultTitle}>Your Mental Health Report</Text>
-          <Image source={require('./assets/success.png')} style={styles.resultImage} />
+          <Image source={require('./assets/success.jpg')} style={styles.resultImage} />
           <Text style={styles.resultText}>You are feeling: {result}</Text>
           <View style={styles.reportContainer}>
             <View style={styles.reportItem}>

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "burnoutbuddy",
+    "name": "Burnout Buddy",
     "slug": "burnoutbuddy",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,10 +18,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.shivamtiwari28.burnoutbuddy"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ddd48f70-c8a0-4e7e-96c7-013770eff667"
+      }
     }
   }
 }
