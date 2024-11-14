@@ -54,7 +54,7 @@ cd burnoutbuddy
 ```
 3.**Install Dependencies**: Install the necessary dependencies with npm
 ```bash
-npm install --force
+npm install 
 ```
 4.**Start the Application**: Finally, run the app using Expo:
 ```bash
