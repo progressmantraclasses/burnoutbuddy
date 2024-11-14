@@ -1,203 +1,173 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, ProgressBarAndroid, Button, Dimensions } from 'react-native';
-import { PieChart } from 'react-native-chart-kit';
+import React, { useState, useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
+import { Accelerometer } from 'expo-sensors';
+import Constants from 'expo-constants';
+import LottieView from 'lottie-react-native';
 
-// Function to categorize app usage
-const categorizeAppUsage = (appName) => {
-  if (['Instagram', 'Facebook', 'TikTok'].includes(appName)) {
-    return 'Social';
-  } else if (['YouTube', 'Netflix', 'Spotify'].includes(appName)) {
-    return 'Entertainment';
-  } else if (['Google News', 'CNN', 'BBC'].includes(appName)) {
-    return 'News';
-  } else {
-    return 'Other';
-  }
-};
+const { width, height } = Dimensions.get('window');
+const CALORIES_PER_STEP = 0.05;
 
-const Dashboard = () => {
-  const [screenTime, setScreenTime] = useState('6h 45m');
-  const [unlocks, setUnlocks] = useState(90);
-  const [socialAppUsage, setSocialAppUsage] = useState([
-    { name: 'Instagram', time: '1h 45m' },
-    { name: 'WhatsApp', time: '2h 15m' },
-    { name: 'YouTube', time: '1h 30m' }
-  ]);
+export default function Stepcounter() {
+  const [steps, setSteps] = useState(0);
+  const [isCounting, setIsCounting] = useState(false);
+  const [lastY, setLastY] = useState(0);
+  const [lastTimestamp, setLastTimeStamp] = useState(0);
 
-  const [burnoutLevel, setBurnoutLevel] = useState(0.4);
+  const animationRefRunning = useRef(null);
+  const animationRefSitting = useRef(null);
 
-  // Function to parse time string and convert to minutes
-  const parseTimeToMinutes = (time) => {
-    if (time && time.includes('h') && time.includes('m')) {
-      const [hours, minutes] = time.split(' ');
-      const hoursInMinutes = parseInt(hours.split('h')[0]) * 60;
-      const mins = parseInt(minutes.split('m')[0]);
-      return hoursInMinutes + mins;
-    } else if (time && time.includes('m')) {
-      return parseInt(time.split('m')[0]);
-    } else {
-      return 0;
-    }
+  useEffect(() => {
+    let subscription;
+    Accelerometer.isAvailableAsync().then((result) => {
+      if (result) {
+        subscription = Accelerometer.addListener((accelerometer) => {
+          const { y } = accelerometer;
+          const threshold = 0.1;
+          const timestamp = new Date().getTime();
+
+          if (
+            Math.abs(y - lastY) > threshold &&
+            !isCounting &&
+            timestamp - lastTimestamp > 800
+          ) {
+            setIsCounting(true);
+            setLastY(y);
+            setLastTimeStamp(timestamp);
+            setSteps((prevSteps) => prevSteps + 1);
+            setTimeout(() => {
+              setIsCounting(false);
+            }, 1200);
+          }
+        });
+      } else {
+        console.log('Accelerometer not available on this device');
+      }
+    });
+
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
+  }, [isCounting, lastY, lastTimestamp]);
+
+  const resetSteps = () => {
+    setSteps(0);
   };
 
-  // Categorize social app usage data
-  const categorizedData = socialAppUsage.reduce((acc, app) => {
-    const category = categorizeAppUsage(app.name);
-    const usageTime = parseTimeToMinutes(app.time);
-
-    if (!acc[category]) {
-      acc[category] = 0;
-    }
-    acc[category] += usageTime;
-    return acc;
-  }, {});
-
-  // Calculate Burnout Score
-  const calculateBurnout = () => {
-    // Assign weights to factors
-    const maxScreenTime = 360; // max healthy screen time (6 hours)
-    const maxUnlocks = 80; // max healthy unlocks per day
-    const socialTime = categorizedData['Social'] || 0;
-    const entertainmentTime = categorizedData['Entertainment'] || 0;
-
-    // Weights
-    const screenTimeWeight = parseTimeToMinutes(screenTime) / maxScreenTime;
-    const unlockWeight = unlocks / maxUnlocks;
-    const socialWeight = socialTime / 120; // consider 2 hours max for social
-    const entertainmentWeight = entertainmentTime / 90; // consider 1.5 hours max for entertainment
-
-    // Burnout calculation formula
-    let score = 0.4 * screenTimeWeight + 0.3 * unlockWeight + 0.2 * socialWeight + 0.1 * entertainmentWeight;
-    score = Math.min(1, Math.max(0, score)); // Clamp between 0 and 1
-
-    setBurnoutLevel(score);
-  };
-
-  // Data for Pie Chart - Categorized Usage
-  const chartData = Object.keys(categorizedData).map((category, index) => ({
-    name: category,
-    usage: categorizedData[category],
-    color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-    legendFontColor: '#7F7F7F',
-    legendFontSize: 15
-  }));
-
-  // Get screen dimensions
-  const screenWidth = Dimensions.get('window').width;
+  const estimatedCaloriesBurned = steps * CALORIES_PER_STEP;
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>Mental Health Analysis</Text>
-
-      {/* Screen Time Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Daily Screen Time</Text>
-        <Text style={styles.sectionContent}>{screenTime}</Text>
-      </View>
-
-      {/* Phone Unlocks Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Phone Unlocks</Text>
-        <Text style={styles.sectionContent}>{unlocks} times</Text>
-      </View>
-
-      {/* Social App Usage Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>App Usage by Category</Text>
-        <PieChart
-          data={chartData}
-          width={screenWidth - 40}
-          height={220}
-          chartConfig={{
-            backgroundColor: '#1cc910',
-            backgroundGradientFrom: '#eff3ff',
-            backgroundGradientTo: '#efefef',
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          }}
-          accessor="usage"
-          backgroundColor="transparent"
-          paddingLeft="15"
-          absolute
-        />
-        {Object.entries(categorizedData).map(([category, time], index) => (
-          <Text key={index} style={styles.sectionContent}>
-            {category}: {Math.floor(time / 60)}h {time % 60}m
-          </Text>
-        ))}
-      </View>
-
-      {/* Burnout Monitor Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Burnout Monitor</Text>
-        <ProgressBarAndroid
-          styleAttr="Horizontal"
-          indeterminate={false}
-          progress={burnoutLevel}
-          color="#ff6347"
-        />
-        <Text style={styles.burnoutLevel}>
-          Burnout Level: {(burnoutLevel * 100).toFixed(0)}%
-        </Text>
-        <Button title="Analyze Burnout" onPress={calculateBurnout} />
-      </View>
-
-      {/* Tips to Reduce Burnout */}
-      {burnoutLevel >= 0.7 && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Tips to Reduce Burnout</Text>
-          <Text style={styles.tip}>1. Take regular short breaks while working.</Text>
-          <Text style={styles.tip}>2. Limit screen time, especially before bedtime.</Text>
-          <Text style={styles.tip}>3. Engage in physical activities like a short walk.</Text>
-          <Text style={styles.tip}>4. Disconnect from social media for a few hours daily.</Text>
-          <Text style={styles.tip}>5. Practice mindfulness or meditation to reduce stress.</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Step Tracker</Text>
+      <View style={styles.infoContainer}>
+        <View style={styles.stepsContainer}>
+          <Text style={styles.stepsText}>{steps}</Text>
+          <Text style={styles.stepsLabel}>Steps</Text>
         </View>
-      )}
-    </ScrollView>
+        <View style={styles.caloriesContainer}>
+          <Text style={styles.caloriesLabel}>Estimated Calories Burned:</Text>
+          <Text style={styles.caloriesText}>
+            {estimatedCaloriesBurned.toFixed(2)} calories
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.animationContainer}>
+        {isCounting ? (
+          <LottieView
+            autoPlay
+            ref={animationRefRunning}
+            style={styles.animation}
+            source={require('./assets/walking.json')}
+          />
+        ) : (
+          <LottieView
+            autoPlay
+            ref={animationRefSitting}
+            style={styles.animation}
+            source={require('./assets/Sitting.json')}
+          />
+        )}
+      </View>
+
+      <TouchableOpacity style={styles.button} onPress={resetSteps}>
+        <Text style={styles.buttonText}>RESET</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f1f8f5', // Light mint green
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  header: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  section: {
+  title: {
+    fontSize: 28,
     marginBottom: 20,
+    fontWeight: 'bold',
+    color: '#005f73', // Dark teal
+  },
+  infoContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  stepsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 20,
+  },
+  stepsText: {
+    fontSize: 36,
+    color: '#94d2bd', // Soft teal
+    fontWeight: 'bold',
+    marginRight: 8,
+  },
+  stepsLabel: {
+    fontSize: 24,
+    color: '#555', // Neutral grey for contrast
+  },
+  caloriesContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  caloriesLabel: {
+    fontSize: 20,
+    color: '#555',
+    marginRight: 6,
+  },
+  caloriesText: {
+    fontSize: 18,
+    color: '#ee6c4d', // Soft coral for contrast
+    fontWeight: 'bold',
+  },
+  animationContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#e0f2e9', // Lighter mint green
+    borderRadius: 15,
+    padding: 20,
+    marginBottom: 20,
+    elevation: 5,
+  },
+  animation: {
+    width: width * 0.8,
+    height: height * 0.4,
+    backgroundColor: 'transparent',
+  },
+  button: {
+    backgroundColor: '#0a9396', // Deep teal
     padding: 15,
     borderRadius: 10,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    marginTop: 20,
   },
-  sectionTitle: {
+  buttonText: {
+    color: '#f1f8f5', // White for readability
     fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 10,
-  },
-  sectionContent: {
-    fontSize: 16,
-    color: '#333',
-  },
-  burnoutLevel: {
-    marginTop: 10,
-    fontSize: 16,
-    fontWeight: '600',
     textAlign: 'center',
   },
-  tip: {
-    fontSize: 14,
-    marginTop: 5,
-  },
 });
-
-export default Dashboard;
