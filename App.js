@@ -84,19 +84,13 @@ const HomeScreen = () => {
       />
       <OptionCard
         title="Diet Plan for Mental Health"
-        imageUri="https://cdn.pixabay.com/photo/2021/07/05/01/04/tomato-6387879_1280.png"
+        imageUri="https://cdn.pixabay.com/photo/2013/07/13/01/22/vegetables-155616_1280.png"
         onPress={() => navigation.navigate('DietPlan')}
         backgroundColor="#dcedc8"
       />
-<<<<<<< HEAD
       <OptionCard
         title="Pomodoro technique for Mental Health"
         imageUri="https://cdn.pixabay.com/photo/2014/06/28/10/06/hour-s-378829_1280.jpg"
-=======
-       <OptionCard
-        title="Pomodoro technique"
-        imageUri="https://cdn.pixabay.com/photo/2013/07/13/13/17/chronograph-160753_1280.png"
->>>>>>> 1741e65f2653290fcf4853bdb3b65e88a49ec97e
         onPress={() => navigation.navigate('Pomodoro')}
         backgroundColor="#c5cae9"
       />
@@ -134,15 +128,13 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="MentalHealthQnA" component={QnAPage} options={{ title: 'Mental Health QnA' }} />
       <Drawer.Screen name="MentalHealthAI" component={WebcamPage} options={{ title: 'Mental Health AI Analysis' }} />
       <Drawer.Screen name="MusicRelax" component={MusicPlayer} options={{ title: 'Relax with Music' }} />
-      <Drawer.Screen name="BurnoutDashboard" component={Dashboard} options={{ title: 'Burnout Dashboard',
-          headerRight: () => (
+      <Drawer.Screen name="BurnoutDashboard" component={Dashboard} options={{ title: 'Burnout Dashboard', headerRight: () => (
             <TouchableOpacity onPress={() => navigation.navigate('BurnoutDashboard')}>
               <Image
                 source={require('./assets/profile2.png')}
                 style={styles.profileImage}
               />
-            </TouchableOpacity>
-          ), }} />
+            </TouchableOpacity>)}} />
       <Drawer.Screen name="Meditation" component={MeditationPage} options={{ title: 'Meditation' }} />
       <Drawer.Screen name="DietPlan" component={DietPlan} options={{ title: 'Diet Plan' }} />
       <Drawer.Screen name="Pomodoro" component={Pomodoro} options={{ title: 'Pomodoro Timer' }} />
@@ -187,7 +179,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
   },
   burnoutBuddyTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     fontFamily: 'serif',
     color: '#333',
@@ -264,4 +256,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-
