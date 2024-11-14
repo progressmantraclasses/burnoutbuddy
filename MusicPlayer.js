@@ -6,31 +6,31 @@ import { Audio } from 'expo-av';
 
 const audioTracks = [
     {
-      title: 'Chill Vibes',
-      artist: 'Relaxing Tunes',
+      title: 'Dandelions',
+      artist: 'Ruth B.',
       source: require('./assets/Dandelions.mp3'),
       albumCover: require('./assets/sukoon.jpg'),
     },
     {
-      title: 'Chill Vibes',
-      artist: 'Relaxing Tunes',
+      title: 'Who Says',
+      artist: 'Selena Gomez',
       source: require('./assets/WhoSays.mp3'),
       albumCover: require('./assets/sukoon.jpg'),
     },
     {
-      title: 'Chill Vibes',
-      artist: 'Sunshine Music',
+      title: 'Ek Zindagi',
+      artist: 'Taniska Sanghvi, Sachin Jigar',
       source: require('./assets/EkZindagi.mp3'),
       albumCover: require('./assets/sukoon.jpg'),
     },
     {
-      title: 'Motivational Vibes',
-      artist: 'relaxing music',
+      title: 'Unstoppable',
+      artist: 'Sia',
       source: require('./assets/Unstoppable.mp3'),
       albumCover: require('./assets/sukoon.jpg'),
     },
     {
-      title: 'Motivational Vibe',
+      title: 'Millionaire',
       artist: 'Yo Yo Honey Singh',
       source: require('./assets/sukoon.mp3'),
       albumCover: require('./assets/sukoon.jpg'),
