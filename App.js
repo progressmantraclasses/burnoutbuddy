@@ -84,13 +84,19 @@ const HomeScreen = () => {
       />
       <OptionCard
         title="Diet Plan for Mental Health"
-        imageUri="https://cdn.pixabay.com/photo/2013/07/13/01/22/vegetables-155616_1280.png"
+        imageUri="https://cdn.pixabay.com/photo/2021/07/05/01/04/tomato-6387879_1280.png"
         onPress={() => navigation.navigate('DietPlan')}
         backgroundColor="#dcedc8"
       />
+<<<<<<< HEAD
       <OptionCard
         title="Pomodoro technique for Mental Health"
         imageUri="https://cdn.pixabay.com/photo/2014/06/28/10/06/hour-s-378829_1280.jpg"
+=======
+       <OptionCard
+        title="Pomodoro technique"
+        imageUri="https://cdn.pixabay.com/photo/2013/07/13/13/17/chronograph-160753_1280.png"
+>>>>>>> 1741e65f2653290fcf4853bdb3b65e88a49ec97e
         onPress={() => navigation.navigate('Pomodoro')}
         backgroundColor="#c5cae9"
       />

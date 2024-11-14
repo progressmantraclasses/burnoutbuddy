@@ -6,8 +6,28 @@ import { Audio } from 'expo-av';
 
 const audioTracks = [
     {
-      title: 'Chill Vibes',
-      artist: 'Relaxing Tunes',
+      title: 'Dandelions',
+      artist: 'Ruth B.',
+      source: require('./assets/Dandelions.mp3'),
+      albumCover: require('./assets/sukoon.png'),
+    },
+    {
+      title: 'Who Says',
+      artist: 'Selena Gomez',
+      source: require('./assets/Who Says.mp3'),
+      albumCover: require('./assets/sukoon.png'),
+
+    }
+    ,
+    {
+      title: 'Ek Zindagi',
+      artist: 'Sachin–Jigar , Taniska Sanghvi',
+      source: require('./assets/Ek Zindagi.mp3'),
+      albumCover: require('./assets/sukoon.png'),
+    },
+    {
+      title: 'Millionaire',
+      artist: 'Yo Yo Honey Singh',
       source: require('./assets/sukoon.mp3'),
       albumCover: require('./assets/sukoon.jpg'),
     },
@@ -18,6 +38,7 @@ const audioTracks = [
       albumCover: require('./assets/sukoon.jpg'),
     },
     {
+<<<<<<< HEAD
       title: 'Sunset Beats',
       artist: 'Sunshine Music',
       source: require('./assets/tadapna.mp3'),
@@ -29,6 +50,13 @@ const audioTracks = [
       source: require('./assets/sukoon.mp3'),
       albumCover: require('./assets/sukoon.jpg'),
     },
+=======
+      title: 'Unstoppable',
+      artist: 'Sia',
+      source: require('./assets/Unstoppable.mp3'),
+      albumCover: require('./assets/sukoon.png'),
+    }
+>>>>>>> 1741e65f2653290fcf4853bdb3b65e88a49ec97e
   ];
 
 const MusicPlayer = () => {
