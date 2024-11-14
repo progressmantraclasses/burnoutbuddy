@@ -90,7 +90,7 @@ const HomeScreen = () => {
       />
       <OptionCard
         title="Pomodoro technique for Mental Health"
-        imageUri="https://cdn.pixabay.com/photo/2014/06/28/10/06/hour-s-378829_1280.jpg"
+        imageUri="https://cdn.pixabay.com/photo/2013/07/13/13/17/chronograph-160753_1280.png"
         onPress={() => navigation.navigate('Pomodoro')}
         backgroundColor="#c5cae9"
       />

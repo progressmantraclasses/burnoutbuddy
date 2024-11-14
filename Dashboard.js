@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Button, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
-import Icon from 'react-native-vector-icons/Ionicons'; // Add icons for enhanced UI
+import Icon from 'react-native-vector-icons/Ionicons';
 
 // Function to categorize app usage
 const categorizeAppUsage = (appName) => {
@@ -16,13 +16,21 @@ const categorizeAppUsage = (appName) => {
   }
 };
 
+// Fixed color mapping for categories
+const categoryColors = {
+  'Social': '#4A90E2',
+  'Entertainment': '#FF8C00',
+  'News': '#50E3C2',
+  'Other': '#7F8C8D',
+};
+
 const Dashboard = () => {
   const [screenTime, setScreenTime] = useState('6h 45m');
   const [unlocks, setUnlocks] = useState(90);
   const [socialAppUsage, setSocialAppUsage] = useState([
     { name: 'Instagram', time: '1h 45m' },
     { name: 'WhatsApp', time: '2h 15m' },
-    { name: 'YouTube', time: '1h 30m' }
+    { name: 'YouTube', time: '1h 30m' },
   ]);
 
   const [burnoutLevel, setBurnoutLevel] = useState(0.4);
@@ -88,12 +96,12 @@ const Dashboard = () => {
   };
 
   // Data for Pie Chart - Categorized Usage
-  const chartData = Object.keys(categorizedData).map((category, index) => ({
+  const chartData = Object.keys(categorizedData).map((category) => ({
     name: category,
     usage: categorizedData[category],
-    color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+    color: categoryColors[category] || '#CCCCCC', // Use default color if category not mapped
     legendFontColor: '#7F7F7F',
-    legendFontSize: 15
+    legendFontSize: 15,
   }));
 
   // Get screen dimensions
@@ -220,48 +228,45 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   cardTitle: {
-    marginLeft: 10,
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
+    marginLeft: 10,
   },
   cardContent: {
     fontSize: 16,
-    color: '#555',
-    marginTop: 5,
+    color: '#666',
   },
   progressBarContainer: {
-    height: 10,
-    width: '100%',
-    backgroundColor: '#e0e0e0',
-    borderRadius: 5,
+    height: 20,
+    backgroundColor: '#DDD',
+    borderRadius: 10,
+    overflow: 'hidden',
     marginVertical: 10,
   },
   progressBar: {
-    height: '100%',
+    height: 20,
     backgroundColor: '#FF6347',
-    borderRadius: 5,
   },
   burnoutLevel: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FF6347',
+    color: '#333',
   },
   analyzeButton: {
-    marginTop: 10,
     backgroundColor: '#4A90E2',
     paddingVertical: 10,
-    borderRadius: 8,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 10,
   },
   analyzeButtonText: {
-    textAlign: 'center',
     color: '#fff',
-    fontWeight: 'bold',
+    fontSize: 16,
   },
   feedback: {
     fontSize: 16,
     color: '#333',
-    marginTop: 10,
   },
 });
 
